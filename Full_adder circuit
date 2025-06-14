@@ -1,0 +1,37 @@
+// design of full_adder circuit
+module full_adder(a,b,cin,sum,cout);
+  input a,b,cin;
+  output sum,cout;
+  reg sum; reg cout;
+  always @(a,b,cin)
+    begin 
+      sum = a^b^cin;
+      cout = a&b | a&cin | b&cin;
+    end
+endmodule
+
+// test bench for simulation
+module testbench;
+  reg a_tb; reg b_tb; reg cin_tb;
+  wire sum_tb; wire cout_tb;
+  full_adder uut(a_tb, b_tb, cin_tb, sum_tb, cout_tb);
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars(0,testbench);
+    end
+  initial
+    begin
+      $monitor($time,"a_tb=%b, b_tb=%b, cin_tb=%b, sum_tb=%b, cout_tb=%b",a_tb, b_tb, cin_tb, sum_tb, cout_tb);
+      
+      #5 a_tb=0; b_tb=0; cin_tb=0;
+      #5 a_tb=0; b_tb=0; cin_tb=1;
+      #5 a_tb=0; b_tb=1; cin_tb=0;
+      #5 a_tb=0; b_tb=1; cin_tb=1;
+      #5 a_tb=1; b_tb=0; cin_tb=0;
+      #5 a_tb=1; b_tb=0; cin_tb=1;
+      #5 a_tb=1; b_tb=1; cin_tb=0;
+      #5 a_tb=1; b_tb=1; cin_tb=1;
+      #5 $finish;
+    end
+endmodule

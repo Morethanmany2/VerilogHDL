@@ -1,0 +1,33 @@
+// design for a half adder circuit
+module half_adder(a,b,sum,cout);
+  input a,b;
+  output sum,cout;
+  reg sum; reg cout;
+  
+  always @(a,b)
+    begin
+      sum = a^b;
+      cout = a&b;
+    end
+endmodule
+
+
+
+module testbench;
+  reg a_tb; reg b_tb; wire sum_tb; wire cout_tb;
+  half_adder uut(a_tb, b_tb, sum_tb, cout_tb);
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars(0, testbench);
+    end
+  initial
+    begin
+      $monitor($time,"a_tb=%b, b_tb=%b, sum_tb=%b, cout_tb=%b", a_tb, b_tb, sum_tb, cout_tb);
+      #5 a_tb=0; b_tb=0;
+      #5 a_tb=0; b_tb=1;
+      #5 a_tb=1; b_tb=0;
+      #5 a_tb=1; b_tb=1;
+      #5 $finish;
+    end
+endmodule
